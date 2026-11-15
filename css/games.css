@@ -256,3 +256,56 @@
   background: color-mix(in srgb, var(--panel) 90%, transparent);
 }
 .mole__cover-title { font-weight: 700; }
+
+/* 2048 */
+.g2048 { display: grid; justify-items: center; width: 100%; }
+
+.g2048__board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+  width: min(100%, 400px);
+  padding: var(--space-2);
+  background: var(--panel-2);
+  border: var(--bw) solid var(--line);
+  border-radius: var(--radius-s);
+  touch-action: none;
+  user-select: none;
+}
+
+.g2048__cell {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 7vw, 2rem);
+  color: #1b1f3b;
+  background: color-mix(in srgb, var(--panel) 55%, transparent);
+  border-radius: var(--radius-s);
+}
+
+.g2048__cell.v-2 { background: #f4ecd8; border: var(--bw) solid #1b1f3b; }
+.g2048__cell.v-4 { background: #ecdfb8; border: var(--bw) solid #1b1f3b; }
+.g2048__cell.v-8 { background: #ffc27a; border: var(--bw) solid #1b1f3b; }
+.g2048__cell.v-16 { background: #ff9f5a; border: var(--bw) solid #1b1f3b; }
+.g2048__cell.v-32 { background: #ff7a52; border: var(--bw) solid #1b1f3b; }
+.g2048__cell.v-64 { background: #ff5a36; border: var(--bw) solid #1b1f3b; }
+.g2048__cell.v-128 { background: #f4d35e; border: var(--bw) solid #1b1f3b; font-size: clamp(1.05rem, 6vw, 1.7rem); }
+.g2048__cell.v-256 { background: #8fdcc0; border: var(--bw) solid #1b1f3b; font-size: clamp(1.05rem, 6vw, 1.7rem); }
+.g2048__cell.v-512 { background: #54d0e0; border: var(--bw) solid #1b1f3b; font-size: clamp(1.05rem, 6vw, 1.7rem); }
+.g2048__cell.v-1024 { background: #7aa2ff; border: var(--bw) solid #1b1f3b; font-size: clamp(0.85rem, 5vw, 1.4rem); }
+.g2048__cell.v-2048 { background: #ffd23f; border: 3px solid #1b1f3b; font-size: clamp(0.85rem, 5vw, 1.4rem); }
+.g2048__cell.v-big { background: #1b1f3b; color: #ffd23f; border: var(--bw) solid #ffd23f; font-size: clamp(0.75rem, 4.4vw, 1.2rem); }
+
+.g2048__cell.is-new { animation: g2048-pop 0.16s ease-out; }
+.g2048__cell.is-merged { animation: g2048-bump 0.18s ease-out; }
+
+@keyframes g2048-pop {
+  from { transform: scale(0.5); }
+  to { transform: scale(1); }
+}
+@keyframes g2048-bump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
