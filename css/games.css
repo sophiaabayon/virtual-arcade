@@ -184,3 +184,75 @@
 .rps__dot.is-win { background: #5fd38d; }
 .rps__dot.is-tie { background: #ffd23f; }
 .rps__dot.is-lose { background: #ff7b6b; }
+
+/* Whack-a-Mole */
+.mole { display: grid; justify-items: center; gap: var(--space-3); width: 100%; }
+
+.mole__hud { display: flex; gap: var(--space-6); }
+.mole__hud div { display: grid; line-height: 1.2; }
+.mole__hud span { color: var(--muted); font-size: var(--step--1); }
+.mole__hud strong { font-family: var(--font-display); font-size: var(--step-1); }
+
+.mole__meter {
+  width: min(100%, 380px);
+  height: 10px;
+  background: var(--panel-2);
+  border: var(--bw) solid var(--line);
+}
+.mole__meter-fill { height: 100%; width: 100%; background: var(--accent); transition: width 0.06s linear; }
+
+.mole__field { position: relative; width: min(100%, 380px); }
+
+.mole__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+
+.mole__hole {
+  position: relative;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+  background: var(--panel-2);
+  border: var(--bw) solid var(--line);
+  border-radius: var(--radius-s);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mole__mole {
+  position: absolute;
+  left: 14%;
+  bottom: 16%;
+  width: 72%;
+  transform: translateY(110%);
+  transition: transform 0.1s ease-out;
+}
+.mole__mole svg { width: 100%; height: auto; }
+.mole__hole.is-up .mole__mole { transform: translateY(0); }
+.mole__hole.is-hit .mole__mole { transform: translateY(35%); filter: brightness(0.8); }
+.mole__hole.is-gold.is-up { background: #fff3c4; }
+[data-theme="dark"] .mole__hole.is-gold.is-up { background: #5a4a16; }
+
+.mole__dirt {
+  position: absolute;
+  left: 8%;
+  bottom: 6%;
+  width: 84%;
+  height: 28%;
+  background: #6b4a33;
+  border: var(--bw) solid #1b1f3b;
+  border-radius: 50%;
+}
+
+.mole__cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  text-align: center;
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+}
+.mole__cover-title { font-weight: 700; }
