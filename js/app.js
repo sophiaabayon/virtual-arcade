@@ -56,5 +56,6 @@
 
   decorateNav();
   Router.on('/', 'home', (ctx) => A.views.home(ctx));
+  Router.on('/library', 'library', (ctx) => A.views.library(ctx));
   Router.start();
 })(window.Arcade);
