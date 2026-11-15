@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pixel Parlor</title>
+  <meta name="description" content="Pixel Parlor is a small online arcade with six games, high scores and a player profile.">
+  <meta name="theme-color" content="#e8ebf3">
+  <script>
+    /* Apply the saved theme before first paint so there is no flash. */
+    (function () {
+      try {
+        var saved = JSON.parse(localStorage.getItem('arcade.v1') || '{}');
+        var theme = saved.settings && saved.settings.theme;
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) { /* storage unavailable: keep the default */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+  <main id="view">
+    <h1>Pixel Parlor</h1>
+    <p>The arcade is warming up.</p>
+  </main>
+</body>
+</html>
