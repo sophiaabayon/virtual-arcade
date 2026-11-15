@@ -67,3 +67,25 @@ input[type="search"].field__input { min-width: min(100%, 280px); }
 .btn--light:active { box-shadow: 0 0 0 #1b1f3b; }
 
 .muted { color: var(--muted); }
+
+/* Square icon buttons in the top bar */
+.tools { display: flex; align-items: center; gap: var(--space-2); }
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--ink);
+  background: var(--panel);
+  border: var(--bw) solid var(--line);
+  border-radius: var(--radius-m);
+  box-shadow: 0 3px 0 var(--shadow);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.12s ease;
+}
+.icon-btn:hover { background: var(--panel-2); }
+.icon-btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--shadow); }
+.icon-btn svg { width: 22px; height: 22px; }
+.icon-btn[aria-pressed="false"] { color: var(--muted); }
