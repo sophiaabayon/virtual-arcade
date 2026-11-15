@@ -1,8 +1,20 @@
-/* Game library: every game as a row, filtered by category. */
+/* Game library: every game as a row, with search, category filter and sorting. */
 
 (function (A) {
   'use strict';
   const { h, clear, Store, Games, Router, formatNumber } = A;
+
+  const SORTS = {
+    title: { label: 'Title, A to Z', compare: (a, b) => a.title.localeCompare(b.title) },
+    plays: {
+      label: 'Most played',
+      compare: (a, b) => Store.stats(b.id).plays - Store.stats(a.id).plays || a.title.localeCompare(b.title),
+    },
+    recent: {
+      label: 'Recently played',
+      compare: (a, b) => Store.stats(b.id).lastPlayed - Store.stats(a.id).lastPlayed || a.title.localeCompare(b.title),
+    },
+  };
 
   function gameRow(game) {
     const stats = Store.stats(game.id);
@@ -25,15 +37,54 @@
 
   A.views.library = function (ctx) {
     const state = {
+      query: '',
+      sort: 'title',
       category: Games.categories.includes(ctx.query.cat) ? ctx.query.cat : 'All',
     };
 
     const list = h('ul', { class: 'cabinet-list' });
     const count = h('p', { class: 'result-count', 'aria-live': 'polite' });
+    const emptyText = h('p', null);
+    const empty = h('div', { class: 'empty-state', hidden: true },
+      h('h2', null, 'No games found'),
+      emptyText,
+      h('button', { type: 'button', class: 'btn', onClick: resetFilters }, 'Clear filters'));
     const chipButtons = new Map();
 
+    const search = h('input', {
+      id: 'library-search',
+      class: 'field__input',
+      type: 'search',
+      placeholder: 'Search by title or category',
+      autocomplete: 'off',
+      onInput: (event) => {
+        state.query = event.target.value;
+        render();
+      },
+    });
+
+    const sortSelect = h('select', {
+      id: 'library-sort',
+      class: 'field__input',
+      onChange: (event) => {
+        state.sort = event.target.value;
+        render();
+      },
+    }, Object.entries(SORTS).map(([value, sort]) => h('option', { value }, sort.label)));
+
+    function matchesQuery(game) {
+      const tokens = state.query.toLowerCase().split(/\s+/).filter(Boolean);
+      if (!tokens.length) return true;
+      const haystack = [game.title, game.tagline, game.category, game.players, game.session]
+        .join(' ').toLowerCase();
+      return tokens.every((token) => haystack.includes(token));
+    }
+
     function visibleGames() {
-      return Games.list.filter((game) => state.category === 'All' || game.category === state.category);
+      return Games.list
+        .filter((game) => state.category === 'All' || game.category === state.category)
+        .filter(matchesQuery)
+        .sort(SORTS[state.sort].compare);
     }
 
     function syncUrl() {
@@ -43,10 +94,25 @@
       Router.replace(`/library${query ? `?${query}` : ''}`);
     }
 
+    function resetFilters() {
+      state.query = '';
+      state.sort = 'title';
+      state.category = 'All';
+      search.value = '';
+      sortSelect.value = 'title';
+      render();
+      syncUrl();
+    }
+
     function render() {
       const games = visibleGames();
       clear(list);
       games.forEach((game) => list.appendChild(gameRow(game)));
+      list.hidden = games.length === 0;
+      empty.hidden = games.length !== 0;
+      emptyText.textContent = state.query.trim()
+        ? `Nothing matches "${state.query.trim()}" in ${state.category === 'All' ? 'any category' : state.category}.`
+        : `There are no games in ${state.category} yet.`;
       count.textContent = games.length === 1 ? '1 game' : `${games.length} games`;
       chipButtons.forEach((button, name) => {
         button.setAttribute('aria-pressed', String(name === state.category));
@@ -67,15 +133,21 @@
       return button;
     }
 
-    const chips = h('div', { class: 'chips', role: 'group', 'aria-label': 'Filter by category' },
-      ['All', ...Games.categories].map(chip));
-
     const node = h('section', { class: 'page' },
       h('div', { class: 'page-head' },
         h('h1', null, 'Game library'),
         h('p', null, 'Pick a cabinet. Every game keeps its own high score.')),
-      h('div', { class: 'toolbar' }, chips, count),
-      list);
+      h('div', { class: 'toolbar' },
+        h('div', { class: 'field' },
+          h('label', { for: 'library-search' }, 'Search games'), search),
+        h('div', { class: 'field' },
+          h('label', { for: 'library-sort' }, 'Sort by'), sortSelect)),
+      h('div', { class: 'toolbar' },
+        h('div', { class: 'chips', role: 'group', 'aria-label': 'Filter by category' },
+          ['All', ...Games.categories].map(chip)),
+        count),
+      list,
+      empty);
 
     render();
     return { title: 'Library', node };

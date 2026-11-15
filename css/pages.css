@@ -102,3 +102,6 @@
   .cabinet__side { grid-column: 2; justify-content: space-between; }
   .cabinet__best { justify-items: start; }
 }
+
+.toolbar .field { flex: 0 1 auto; }
+.toolbar:first-of-type { align-items: flex-end; }
