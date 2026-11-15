@@ -23,11 +23,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
 </head>
 <body>
-  <main id="view">
-    <h1>Pixel Parlor</h1>
-    <p>The arcade is warming up.</p>
-  </main>
+  <a class="skip-link" href="#view">Skip to content</a>
+
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#/" aria-label="Pixel Parlor home">
+        <svg viewBox="0 0 8 8" shape-rendering="crispEdges" aria-hidden="true">
+          <path fill="currentColor" d="M2 0h4v1h1v1h1v4H7v1H6v1H2V7H1V6H0V2h1V1h1z"/>
+          <path style="fill: var(--coin)" d="M2 1h4v1h1v4H6v1H2V6H1V2h1z"/>
+          <rect x="3" y="2" width="2" height="4" fill="currentColor"/>
+        </svg>
+        <span>Pixel Parlor</span>
+      </a>
+    </header>
+
+    <nav class="nav" aria-label="Primary">
+      <a href="#/" data-route="home">Home</a>
+      <a href="#/library" data-route="library">Library</a>
+      <a href="#/library?fav=1" data-route="favorites">Favorites</a>
+      <a href="#/profile" data-route="profile">Profile</a>
+    </nav>
+
+    <main id="view" tabindex="-1">
+      <h1>Pixel Parlor</h1>
+      <p>The arcade is warming up.</p>
+    </main>
+  </div>
 </body>
 </html>
