@@ -97,5 +97,6 @@
   setupSoundToggle();
   Router.on('/', 'home', (ctx) => A.views.home(ctx));
   Router.on('/library', 'library', (ctx) => A.views.library(ctx));
+  Router.on('/game/:id', 'game', (ctx) => A.views.game(ctx));
   Router.start();
 })(window.Arcade);
